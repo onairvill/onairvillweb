@@ -924,5 +924,37 @@
 
 })();
 </script>
+
+<div class="snav" aria-label="Page scroll">
+  <button type="button" class="snav-btn snav-up" aria-label="Nach oben / 맨 위로" title="맨 위로"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+  <button type="button" class="snav-btn snav-down" aria-label="Nach unten / 맨 아래로" title="맨 아래로"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+</div>
+<style>
+  .snav{position:fixed;right:24px;bottom:24px;z-index:900;display:flex;flex-direction:column;gap:8px;opacity:0;pointer-events:none;transition:opacity .25s}
+  .snav.on{opacity:1;pointer-events:auto}
+  .snav-btn{width:46px;height:46px;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:#6C4DF6;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:background .2s,opacity .2s}
+  .snav-btn:hover{background:#3884FF}
+  .snav-btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .snav-btn[hidden]{display:none}
+  @media(max-width:720px){.snav{right:14px;bottom:16px}.snav-btn{width:42px;height:42px}}
+  @media print{.snav{display:none}}
+</style>
+<script>
+(function(){
+  var nav=document.querySelector('.snav'); if(!nav) return;
+  var up=nav.querySelector('.snav-up'), down=nav.querySelector('.snav-down');
+  var smooth=!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function go(y){window.scrollTo({top:y,behavior:smooth?'smooth':'auto'});}
+  up.addEventListener('click',function(){go(0);});
+  document.querySelectorAll('a.ft-sw').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(0);});});
+  down.addEventListener('click',function(){go(document.documentElement.scrollHeight);});
+  function upd(){
+    var y=window.scrollY||0, max=document.documentElement.scrollHeight-window.innerHeight;
+    nav.classList.toggle('on', y>300);
+    up.hidden = y<300; down.hidden = y>max-120;
+  }
+  window.addEventListener('scroll',upd,{passive:true}); window.addEventListener('resize',upd); upd();
+})();
+</script>
 </body>
 </html>
